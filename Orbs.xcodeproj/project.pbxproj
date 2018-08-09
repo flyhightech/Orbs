@@ -15,6 +15,13 @@
 		A1DA8D60211CF0670002E7E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D5E211CF0670002E7E6 /* Main.storyboard */; };
 		A1DA8D62211CF0710002E7E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D61211CF0710002E7E6 /* Assets.xcassets */; };
 		A1DA8D65211CF0710002E7E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D63211CF0710002E7E6 /* LaunchScreen.storyboard */; };
+		A1DA8D74211CF3CF0002E7E6 /* powerUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D6D211CF3CF0002E7E6 /* powerUp.wav */; };
+		A1DA8D75211CF3CF0002E7E6 /* move.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D6E211CF3CF0002E7E6 /* move.wav */; };
+		A1DA8D76211CF3CF0002E7E6 /* MenuHighscoreMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D6F211CF3CF0002E7E6 /* MenuHighscoreMusic.mp3 */; };
+		A1DA8D77211CF3CF0002E7E6 /* background.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D70211CF3CF0002E7E6 /* background.wav */; };
+		A1DA8D78211CF3CF0002E7E6 /* levelCompleted.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D71211CF3CF0002E7E6 /* levelCompleted.wav */; };
+		A1DA8D79211CF3CF0002E7E6 /* fail.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D72211CF3CF0002E7E6 /* fail.wav */; };
+		A1DA8D7A211CF3CF0002E7E6 /* levelUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D73211CF3CF0002E7E6 /* levelUp.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +35,13 @@
 		A1DA8D61211CF0710002E7E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1DA8D64211CF0710002E7E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1DA8D66211CF0710002E7E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1DA8D6D211CF3CF0002E7E6 /* powerUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = powerUp.wav; sourceTree = "<group>"; };
+		A1DA8D6E211CF3CF0002E7E6 /* move.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = move.wav; sourceTree = "<group>"; };
+		A1DA8D6F211CF3CF0002E7E6 /* MenuHighscoreMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MenuHighscoreMusic.mp3; sourceTree = "<group>"; };
+		A1DA8D70211CF3CF0002E7E6 /* background.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = background.wav; sourceTree = "<group>"; };
+		A1DA8D71211CF3CF0002E7E6 /* levelCompleted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = levelCompleted.wav; sourceTree = "<group>"; };
+		A1DA8D72211CF3CF0002E7E6 /* fail.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fail.wav; sourceTree = "<group>"; };
+		A1DA8D73211CF3CF0002E7E6 /* levelUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = levelUp.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,11 +80,26 @@
 				A1DA8D5A211CF0670002E7E6 /* GameScene.swift */,
 				A1DA8D5C211CF0670002E7E6 /* GameViewController.swift */,
 				A1DA8D5E211CF0670002E7E6 /* Main.storyboard */,
+				A1DA8D6C211CF3CF0002E7E6 /* Sounds */,
 				A1DA8D61211CF0710002E7E6 /* Assets.xcassets */,
 				A1DA8D63211CF0710002E7E6 /* LaunchScreen.storyboard */,
 				A1DA8D66211CF0710002E7E6 /* Info.plist */,
 			);
 			path = Orbs;
+			sourceTree = "<group>";
+		};
+		A1DA8D6C211CF3CF0002E7E6 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				A1DA8D6D211CF3CF0002E7E6 /* powerUp.wav */,
+				A1DA8D6E211CF3CF0002E7E6 /* move.wav */,
+				A1DA8D6F211CF3CF0002E7E6 /* MenuHighscoreMusic.mp3 */,
+				A1DA8D70211CF3CF0002E7E6 /* background.wav */,
+				A1DA8D71211CF3CF0002E7E6 /* levelCompleted.wav */,
+				A1DA8D72211CF3CF0002E7E6 /* fail.wav */,
+				A1DA8D73211CF3CF0002E7E6 /* levelUp.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,9 +162,16 @@
 			files = (
 				A1DA8D60211CF0670002E7E6 /* Main.storyboard in Resources */,
 				A1DA8D57211CF0670002E7E6 /* GameScene.sks in Resources */,
+				A1DA8D77211CF3CF0002E7E6 /* background.wav in Resources */,
+				A1DA8D78211CF3CF0002E7E6 /* levelCompleted.wav in Resources */,
+				A1DA8D7A211CF3CF0002E7E6 /* levelUp.wav in Resources */,
 				A1DA8D62211CF0710002E7E6 /* Assets.xcassets in Resources */,
+				A1DA8D75211CF3CF0002E7E6 /* move.wav in Resources */,
 				A1DA8D65211CF0710002E7E6 /* LaunchScreen.storyboard in Resources */,
 				A1DA8D59211CF0670002E7E6 /* Actions.sks in Resources */,
+				A1DA8D79211CF3CF0002E7E6 /* fail.wav in Resources */,
+				A1DA8D76211CF3CF0002E7E6 /* MenuHighscoreMusic.mp3 in Resources */,
+				A1DA8D74211CF3CF0002E7E6 /* powerUp.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
