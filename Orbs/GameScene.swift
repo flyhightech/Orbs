@@ -11,10 +11,20 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-   
+    var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
+    
+    func setupTracks() {
+        for i in 0...8 {
+            if let track = self.childNode(withName: "\(i)") as? SKSpriteNode {
+                tracksArray?.append(track)
+            }
+        }
+    }
     
     override func didMove(to view: SKView) {
+        setupTracks()
         
+        tracksArray?.last?.color = UIColor.yellow
         
     }
     
