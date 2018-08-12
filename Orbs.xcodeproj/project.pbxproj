@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A1805C2C211E981500C0E7FF /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A1805C2B211E981500C0E7FF /* GameScene.sks */; };
+		A1805C2E211EC75900C0E7FF /* pulse.sks in Resources */ = {isa = PBXBuildFile; fileRef = A1805C2D211EC75900C0E7FF /* pulse.sks */; };
+		A1805C36211EC9B900C0E7FF /* fireworks.sks in Resources */ = {isa = PBXBuildFile; fileRef = A1805C35211EC9B900C0E7FF /* fireworks.sks */; };
 		A1DA8D55211CF0670002E7E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DA8D54211CF0670002E7E6 /* AppDelegate.swift */; };
 		A1DA8D59211CF0670002E7E6 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = A1DA8D58211CF0670002E7E6 /* Actions.sks */; };
 		A1DA8D5B211CF0670002E7E6 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DA8D5A211CF0670002E7E6 /* GameScene.swift */; };
@@ -26,6 +28,8 @@
 
 /* Begin PBXFileReference section */
 		A1805C2B211E981500C0E7FF /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		A1805C2D211EC75900C0E7FF /* pulse.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = pulse.sks; sourceTree = "<group>"; };
+		A1805C35211EC9B900C0E7FF /* fireworks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fireworks.sks; sourceTree = "<group>"; };
 		A1DA8D51211CF0670002E7E6 /* Orbs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orbs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DA8D54211CF0670002E7E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1DA8D58211CF0670002E7E6 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -77,9 +81,11 @@
 				A1DA8D54211CF0670002E7E6 /* AppDelegate.swift */,
 				A1DA8D58211CF0670002E7E6 /* Actions.sks */,
 				A1DA8D5A211CF0670002E7E6 /* GameScene.swift */,
+				A1805C2D211EC75900C0E7FF /* pulse.sks */,
 				A1805C2B211E981500C0E7FF /* GameScene.sks */,
 				A1DA8D5C211CF0670002E7E6 /* GameViewController.swift */,
 				A1DA8D5E211CF0670002E7E6 /* Main.storyboard */,
+				A1805C35211EC9B900C0E7FF /* fireworks.sks */,
 				A1DA8D6C211CF3CF0002E7E6 /* Sounds */,
 				A1DA8D61211CF0710002E7E6 /* Assets.xcassets */,
 				A1DA8D63211CF0710002E7E6 /* LaunchScreen.storyboard */,
@@ -164,9 +170,11 @@
 				A1DA8D77211CF3CF0002E7E6 /* background.wav in Resources */,
 				A1DA8D78211CF3CF0002E7E6 /* levelCompleted.wav in Resources */,
 				A1DA8D7A211CF3CF0002E7E6 /* levelUp.wav in Resources */,
+				A1805C36211EC9B900C0E7FF /* fireworks.sks in Resources */,
 				A1805C2C211E981500C0E7FF /* GameScene.sks in Resources */,
 				A1DA8D62211CF0710002E7E6 /* Assets.xcassets in Resources */,
 				A1DA8D75211CF3CF0002E7E6 /* move.wav in Resources */,
+				A1805C2E211EC75900C0E7FF /* pulse.sks in Resources */,
 				A1DA8D65211CF0710002E7E6 /* LaunchScreen.storyboard in Resources */,
 				A1DA8D59211CF0670002E7E6 /* Actions.sks in Resources */,
 				A1DA8D79211CF3CF0002E7E6 /* fail.wav in Resources */,
