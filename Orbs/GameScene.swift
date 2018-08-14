@@ -15,7 +15,7 @@ enum Enemies : Int {
     case large
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
     var player:SKSpriteNode?
@@ -66,11 +66,13 @@ class GameScene: SKScene {
         pulse.position = CGPoint(x: 0, y: 0)
     }
     
+//    This is the code that creates the target for the game.
+    
     func createTarget () {
         target = self.childNode(withName: "target") as? SKSpriteNode
         target?.physicsBody = SKPhysicsBody(circleOfRadius: target!.size.width / 2)
         target?.physicsBody?.categoryBitMask = targetCategory
-        
+        target?.physicsBody?.collisionBitMask = 0 
         
     }
     
@@ -126,9 +128,33 @@ class GameScene: SKScene {
         
     }
     
+    func movePlayerToStart() {
+        
+        if let player = self.player {
+            player.removeFromParent()
+            self.player = nil
+            self.createPlayer()
+            self.currentTrack = 0
+        }
+        
+    }
+    
+    func nextLevel(playerPhysicsBody: SKPhysicsBody) {
+        let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
+        playerPhysicsBody.node?.addChild(emitter!)
+        
+        self.run(SKAction.wait(forDuration: 0.5)) {
+            emitter?.removeFromParent()
+            self.movePlayerToStart()
+        }
+    }
+    
     override func didMove(to view: SKView) {
         setupTracks()
         createPlayer()
+        createTarget()
+        
+        self.physicsWorld.contactDelegate = self
         
         
         if let numberOfTracks = tracksArray?.count {
@@ -172,8 +198,20 @@ class GameScene: SKScene {
         if let player = self.player {
             
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y: player.position.y), duration: 0.2)
+            
+            let up = directionArray[currentTrack + 1]
             player.run(moveAction) {
                 self.movingToTrack = false
+                
+                if self.currentTrack != 8 {
+                    
+                    self.player?.physicsBody?.velocity = up ? CGVector(dx: 0, dy: self.velocityArray[self.currentTrack]) : CGVector(dx: 0, dy:
+                        -self.velocityArray[self.currentTrack])
+                    
+                } else {
+                    self.player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+                }
+                
             }
             currentTrack += 1
             
@@ -212,8 +250,31 @@ class GameScene: SKScene {
         player?.removeAllActions()
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        var playerBody:SKPhysicsBody
+        var otherBody:SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            playerBody = contact.bodyA
+            otherBody = contact.bodyB
+        } else {
+            playerBody = contact.bodyB
+            otherBody = contact.bodyA
+        }
+        
+        if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory {
+            movePlayerToStart()
+        } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory {
+            nextLevel(playerPhysicsBody: playerBody)
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        if let player = self.player {
+            if player.position.y > self.size.height || player.position.y < 0 {
+                movePlayerToStart()
+            }
+        }
     }
    
     
