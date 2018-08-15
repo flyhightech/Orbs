@@ -20,21 +20,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
     var player:SKSpriteNode?
     var target:SKSpriteNode?
+    var timeLabel:SKLabelNode?
+    var scoreLabel:SKLabelNode?
+    var currentScore:Int = 0 {
+        didSet {
+            self.scoreLabel?.text = "Score: \(self.currentScore)"
+        }
+    }
+    
+    func createHUD() {
+        timeLabel = self.childNode(withName: "time") as? SKLabelNode
+        scoreLabel = self.childNode(withName: "score") as? SKLabelNode
+        
+        remainingTime = 60
+        currentScore = 0
+    }
+    
+    var remainingTime:TimeInterval = 60 {
+        didSet {
+            self.timeLabel?.text = "Time: \(Int(self.remainingTime))"
+        }
+    }
+    
     
 //    Below we create the var that controls the players movement from track to track
     
     var currentTrack = 0
     var movingToTrack = false
     
-    var moveSound = SKAction.playSoundFileNamed("move.wave", waitForCompletion: false)
+    let moveSound = SKAction.playSoundFileNamed("move.wav", waitForCompletion: false)
+    var backgroundNoise:SKAudioNode!
+    
+    
     
     let trackVelocities = [180,200,250]
     var directionArray = [Bool]()
     var velocityArray = [Int]()
     
-    let playerCategory:UInt32 = 0x1 << 0
-    let enemyCategory:UInt32  = 0x1 << 1
-    let targetCategory:UInt32 = 0x1 << 2
+//    Adding the category bit masks below.
+    
+    let playerCategory:UInt32  = 0x1 << 0
+    let enemyCategory:UInt32   = 0x1 << 1
+    let targetCategory:UInt32  = 0x1 << 2
+    let powerUpCategory:UInt32 = 0x1 << 3
     
 //    Below is the array that sets up the tracks in the scene.
     
@@ -109,6 +137,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return enemySprite
     }
     
+    func createPowerUP(forTrack track:Int) -> SKSpriteNode? {
+        let powerUpSprite = SKSpriteNode(imageNamed: "powerUp")
+        powerUpSprite.name = "ENEMY"
+        
+        powerUpSprite.physicsBody = SKPhysicsBody(circleOfRadius: powerUpSprite.size.width / 2)
+        powerUpSprite.physicsBody?.linearDamping = 0
+        powerUpSprite.physicsBody?.categoryBitMask = powerUpCategory
+        
+        let up = directionArray[track]
+        guard let powerUpXPosition = tracksArray?[track].position.x else {return nil}
+        
+        powerUpSprite.position.x = powerUpXPosition
+        powerUpSprite.position.y = up ? -130 : self.size.height + 130
+        powerUpSprite.physicsBody?.velocity = up ? CGVector(dx: 0, dy: velocityArray[track]) :
+        CGVector(dx: 0, dy: -velocityArray[track])
+        
+        return powerUpSprite
+    }
     
     func spawnEnemies() {
         for i in 1...7 {
@@ -140,6 +186,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func nextLevel(playerPhysicsBody: SKPhysicsBody) {
+        currentScore += 1
+        self.run(SKAction.playSoundFileNamed("levelUp.wav", waitForCompletion: true))
         let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
         playerPhysicsBody.node?.addChild(emitter!)
         
@@ -151,11 +199,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         setupTracks()
+        createHUD()
+        launchGameTimer()
         createPlayer()
         createTarget()
         
         self.physicsWorld.contactDelegate = self
         
+        if let musicURL = Bundle.main.url(forResource: "background", withExtension: "wav") {
+            backgroundNoise = SKAudioNode(url: musicURL)
+            addChild(backgroundNoise)
+        }
         
         if let numberOfTracks = tracksArray?.count {
             for _ in 0 ... numberOfTracks {
@@ -171,6 +225,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.spawnEnemies()
             }, SKAction.wait(forDuration: 2)])))
         
+    }
+    
+    func launchGameTimer() {
+        let timeAction = SKAction.repeatForever(SKAction.sequence([SKAction.run({
+            self.remainingTime -= 1
+        }),SKAction.wait(forDuration: 1)]))
+        
+        timeLabel?.run(timeAction)
     }
     
 //    Below is the code we set the action for the orb
@@ -263,6 +325,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory {
+            self.run(SKAction.playSoundFileNamed("fail.wav", waitForCompletion: true))
             movePlayerToStart()
         } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory {
             nextLevel(playerPhysicsBody: playerBody)
@@ -274,6 +337,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if player.position.y > self.size.height || player.position.y < 0 {
                 movePlayerToStart()
             }
+        }
+        if remainingTime <= 10 {
+            timeLabel?.fontColor = UIColor.red
         }
     }
    
