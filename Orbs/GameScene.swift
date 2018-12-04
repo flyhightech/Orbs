@@ -20,15 +20,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
     var player:SKSpriteNode?
     var target:SKSpriteNode?
+    var pause:SKSpriteNode?
     var timeLabel:SKLabelNode?
     var scoreLabel:SKLabelNode?
     var currentScore:Int = 0 {
         didSet {
             self.scoreLabel?.text = "Score: \(self.currentScore)"
+            GameHandler.sharedInstance.score = currentScore
+            
         }
     }
     
     func createHUD() {
+        pause = self.childNode(withName: "pause") as? SKSpriteNode
         timeLabel = self.childNode(withName: "time") as? SKLabelNode
         scoreLabel = self.childNode(withName: "score") as? SKLabelNode
         
@@ -82,7 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player?.physicsBody?.linearDamping = 0
         player?.physicsBody?.categoryBitMask = playerCategory
         player?.physicsBody?.collisionBitMask = 0
-        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory
+        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory | powerUpCategory
         
         guard let playerPosition = tracksArray?.first?.position.x else { return }
         player?.position = CGPoint(x: playerPosition, y: self.size.height / 2)
@@ -144,6 +148,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         powerUpSprite.physicsBody = SKPhysicsBody(circleOfRadius: powerUpSprite.size.width / 2)
         powerUpSprite.physicsBody?.linearDamping = 0
         powerUpSprite.physicsBody?.categoryBitMask = powerUpCategory
+        powerUpSprite.physicsBody?.collisionBitMask = 0
         
         let up = directionArray[track]
         guard let powerUpXPosition = tracksArray?[track].position.x else {return nil}
@@ -157,11 +162,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnEnemies() {
-        for i in 1...7 {
-            let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
-            if let newEnemy = createEnemy(type: randomEnemyType, forTrack: i) {
-                self.addChild(newEnemy)
+        
+        var randomTrackNumber = 0
+        let createPowerUp = GKRandomSource.sharedRandom().nextBool()
+        
+        if createPowerUp {
+            randomTrackNumber = GKRandomSource.sharedRandom().nextInt(upperBound: 6) + 1
+            if let powerUpObject = self.createPowerUP(forTrack: randomTrackNumber) {
+                self.addChild(powerUpObject)
             }
+        }
+        
+        for i in 1...7 {
+            
+            if randomTrackNumber != i {
+                let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
+                if let newEnemy = createEnemy(type: randomEnemyType, forTrack: i) {
+                    self.addChild(newEnemy)
+                }
+                
+            }
+            
         }
         
 //        Below is the code that removes the enemy at a certain point
@@ -194,6 +215,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.run(SKAction.wait(forDuration: 0.5)) {
             emitter?.removeFromParent()
             self.movePlayerToStart()
+        }
+    }
+    
+    func gameOver() {
+        
+        GameHandler.sharedInstance.saveGameStats()
+        
+        self.run(SKAction.playSoundFileNamed("levelCompleted.wav", waitForCompletion: true))
+        let transition = SKTransition.fade(withDuration: 1)
+        if let gameOverScene = SKScene(fileNamed: "GameOverScene") {
+            gameOverScene.scaleMode = .aspectFit
+            self.view?.presentScene(gameOverScene, transition: transition)
         }
     }
     
@@ -289,11 +322,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let node = self.nodes(at: location).first
             
             if node?.name == "right" {
-                moveToNextTrack()
+                if currentTrack < 8 {
+                    moveToNextTrack()
+                }
+                
             } else if node?.name == "up" {
                 moveVertically(up: true)
             } else if node?.name == "down" {
                 moveVertically(up: false)
+            } else if node?.name == "pause", let scene = self.scene {
+                if scene.isPaused {
+                    scene.isPaused = false
+                } else {
+                    scene.isPaused = true
+                }
             }
         }
     }
@@ -312,6 +354,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player?.removeAllActions()
     }
     
+//    The below code is for the contacts of each sprite I believe. 
+    
     func didBegin(_ contact: SKPhysicsContact) {
         var playerBody:SKPhysicsBody
         var otherBody:SKPhysicsBody
@@ -329,6 +373,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             movePlayerToStart()
         } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory {
             nextLevel(playerPhysicsBody: playerBody)
+        } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == powerUpCategory {
+            self.run(SKAction.playSoundFileNamed("powerUp.wav", waitForCompletion: true))
+            otherBody.node?.removeFromParent()
+            remainingTime += 10
         }
     }
     
@@ -340,6 +388,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if remainingTime <= 10 {
             timeLabel?.fontColor = UIColor.red
+        }
+        
+        if remainingTime == 0 {
+            gameOver()
         }
     }
    
